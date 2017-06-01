@@ -1,25 +1,28 @@
 var path = require('path')
-var utils = require('./utils')
 var webpack = require('webpack')
-var config = require('../config')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+var VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
-var env = config.build.env
+var config = require('../config')
+var utils = require('./utils')
+
+var isProd = process.env.NODE_ENV === 'production'
 
 var webpackConfig = merge(baseWebpackConfig, {
+  entry: {
+    app: './src/entry-client.js'
+  },
   module: {
     rules: utils.styleLoaders({
-      sourceMap: config.build.productionSourceMap,
+      sourceMap: config[isProd ? 'build' : 'dev'].productionSourceMap,
       extract: true
     })
   },
-  devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
@@ -28,24 +31,8 @@ var webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
-      'process.env': env
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      sourceMap: true
-    }),
-    // extract css into its own file
-    new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css')
-    }),
-    // Compress extracted CSS. We are using this plugin so that possible
-    // duplicated CSS from different components can be deduped.
-    new OptimizeCSSPlugin({
-      cssProcessorOptions: {
-        safe: true
-      }
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.VUE_ENV': '"client"'
     }),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
@@ -92,16 +79,41 @@ var webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
+    new VueSSRClientPlugin()
+  ]
+})
+
+if (process.env.NODE_ENV === 'production') {
+  webpackConfig.plugins.push(
     // service worker caching
     new SWPrecacheWebpackPlugin({
-      cacheId: 'my-vue-app',
+      cacheId: 'vue-hn-pwa-guide',
       filename: 'service-worker.js',
       staticFileGlobs: ['dist/**/*.{js,html,css,png,svg,json}'],
       minify: true,
-      stripPrefix: 'dist/'
+      stripPrefix: 'dist/',
+      staticFileGlobsIgnorePatterns: [/\.map$/, /\.json$/],
+      runtimeCaching: [
+        {
+          urlPattern: '/',
+          handler: 'networkFirst'
+        },
+        {
+          urlPattern: /\/(top|new|show|ask|jobs)/,
+          handler: 'networkFirst'
+        },
+        {
+          urlPattern: '/item/:id',
+          handler: 'networkFirst'
+        },
+        {
+          urlPattern: '/user/:id',
+          handler: 'networkFirst'
+        }
+      ]
     })
-  ]
-})
+  )
+}
 
 if (config.build.productionGzip) {
   var CompressionWebpackPlugin = require('compression-webpack-plugin')
