@@ -82,8 +82,6 @@ function compileWebpackClient(ready, config, app) {
   })
 }
 
-
-
 class Ready extends EventEmitter {
   constructor() {
     super()
