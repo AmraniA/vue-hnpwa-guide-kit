@@ -5,6 +5,7 @@ var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -16,8 +17,7 @@ module.exports = {
     ? false
     : '#cheap-module-source-map',
   output: {
-    // path: config.build.assetsRoot,
-    path: path.resolve(__dirname, '../dist'),
+    path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath: '/dist'
   },
