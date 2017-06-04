@@ -2133,9 +2133,9 @@ find-up@^1.0.0:
     path-exists "^2.0.0"
     pinkie-promise "^2.0.0"
 
-firebase-hackernews@^0.4.0:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/firebase-hackernews/-/firebase-hackernews-0.4.1.tgz#588711e69414f265f1fed70fed74b4a65d91fa43"
+firebase-hackernews@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/firebase-hackernews/-/firebase-hackernews-0.6.1.tgz#a0a9162f4ca1a08f3cbfe1998d226e55b4993ef0"
   dependencies:
     firebase "^3.9.0"
     isomorphic-unfetch "^1.0.0"

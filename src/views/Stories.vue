@@ -12,21 +12,19 @@
 </template>
 
 <script>
-import hackernews from 'firebase-hackernews'
 import Item from '@/components/Item'
 
 export default {
-  beforeMount () {
-    this.fetchItems()
-  },
   props: {
     type: String
   },
   data () {
+    // items will be updated when navigation changed
     return {
-      items: [],
-      itemPerPage: 30,
-      maxPage: 0
+      items: this.$hn.storiesCached(this.type, {
+        page: Number(this.$route.params.page || 1)
+      }),
+      totalItems: this.$hn.lengthCached(this.type)
     }
   },
   computed: {
@@ -35,21 +33,15 @@ export default {
     },
     hasMore () {
       return this.page < this.maxPage
+    },
+    maxPage () {
+      return this.totalItems / this.items.length
     }
   },
   watch: {
     page (to, from) {
-      this.fetchItems()
-    }
-  },
-  methods: {
-    async fetchItems () {
-      this.items = await hackernews().stories(this.type, {
-        page: this.page,
-        count: this.itemPerPage
-      })
-
-      this.maxPage = Number.parseInt(this.items.totalLength / this.itemPerPage)
+      // items will be updated when page changed
+      this.items = this.$hn.storiesCached(this.type, { page: to })
     }
   },
   components: {

@@ -9,6 +9,13 @@ Vue.use(Router)
 function createStory (type) {
   return {
     name: `${type}-stories-view`,
+    // custom static method for target components
+    // can be accessed at $options
+    asyncData ({ hn, route }) {
+      return hn.stories(type, {
+        page: Number(route.params.page || 1)
+      })
+    },
     render (ce) {
       return ce(Stories, { props: { type } })
     }
@@ -20,12 +27,12 @@ export function createRouter () {
     mode: 'history',
     routes: [
       { path: '/', name: 'Main', component: createStory('top') },
-      { path: '/top/:page?', name: 'Top', component: createStory('top') },
-      { path: '/new/:page?', name: 'New', component: createStory('new') },
-      { path: '/best/:page?', name: 'Best', component: createStory('best') },
-      { path: '/ask/:page?', name: 'Ask', component: createStory('ask') },
-      { path: '/show/:page?', name: 'Show', component: createStory('show') },
-      { path: '/job/:page?', name: 'Job', component: createStory('job') },
+      { path: '/top/:page(\\d+)?', name: 'Top', component: createStory('top') },
+      { path: '/new/:page(\\d+)?', name: 'New', component: createStory('new') },
+      { path: '/best/:page(\\d+)?', name: 'Best', component: createStory('best') },
+      { path: '/ask/:page(\\d+)?', name: 'Ask', component: createStory('ask') },
+      { path: '/show/:page(\\d+)?', name: 'Show', component: createStory('show') },
+      { path: '/job/:page(\\d+)?', name: 'Job', component: createStory('job') },
       { path: '/users/:id?', name: 'Users', component: Users },
       { path: '/comments/:id?', name: 'Comments', component: Comments }
     ],
