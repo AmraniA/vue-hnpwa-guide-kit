@@ -1,9 +1,9 @@
+
 var path = require('path')
 var webpack = require('webpack')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 var VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
@@ -33,23 +33,6 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       'process.env.VUE_ENV': '"client"'
-    }),
-    // generate dist index.html with correct asset hash for caching.
-    // you can customize output by editing /index.html
-    // see https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: config.build.index,
-      template: 'index.html',
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
-      },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
     }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
@@ -83,7 +66,7 @@ var webpackConfig = merge(baseWebpackConfig, {
   ]
 })
 
-if (process.env.NODE_ENV === 'production') {
+if (isProd) {
   webpackConfig.plugins.push(
     // service worker caching
     new SWPrecacheWebpackPlugin({
@@ -91,26 +74,20 @@ if (process.env.NODE_ENV === 'production') {
       filename: 'service-worker.js',
       staticFileGlobs: ['dist/**/*.{js,html,css,png,svg,json}'],
       minify: true,
-      stripPrefix: 'dist/',
       staticFileGlobsIgnorePatterns: [/\.map$/, /\.json$/],
-      runtimeCaching: [
-        {
-          urlPattern: '/',
-          handler: 'networkFirst'
-        },
-        {
-          urlPattern: /\/(top|new|show|ask|jobs)/,
-          handler: 'networkFirst'
-        },
-        {
-          urlPattern: '/item/:id',
-          handler: 'networkFirst'
-        },
-        {
-          urlPattern: '/user/:id',
-          handler: 'networkFirst'
-        }
-      ]
+      runtimeCaching: [{
+        urlPattern: '/',
+        handler: 'networkFirst'
+      }, {
+        urlPattern: /\/(top|new|show|ask|jobs)/,
+        handler: 'networkFirst'
+      }, {
+        urlPattern: '/item/:id',
+        handler: 'networkFirst'
+      }, {
+        urlPattern: '/user/:id',
+        handler: 'networkFirst'
+      }]
     })
   )
 }
