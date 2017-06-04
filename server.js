@@ -32,8 +32,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(compression({ threshold: 0 }))
-app.use('/dist', express.static('dist'))
-app.use('/static', express.static('dist/static'))
+app.use('/dist', express.static('./dist'))
+app.use('/static', express.static('./dist/static'))
 app.use('/manifest.json', express.static('./dist/static/manifest.json'))
 app.use('/service-worker.js', express.static('./dist/service-worker.js'))
 app.use(favicon('./static/img/logo-32x32.png'))
