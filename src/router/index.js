@@ -1,8 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Stories from '@/views/Stories'
-import Users from '@/views/Users'
-import Comments from '@/views/Comments'
 
 Vue.use(Router)
 
@@ -21,6 +18,10 @@ function createStory (type) {
     }
   }
 }
+
+const Stories = () => import(/* webpackChunkName: "stories" */'@/views/Stories.vue')
+const Users = () => import(/* webpackChunkName: "users" */'@/views/Users.vue')
+const Comments = () => import(/* webpackChunkName: "comments" */ '@/views/Comments.vue')
 
 export function createRouter () {
   return new Router({
