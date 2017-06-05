@@ -9,9 +9,7 @@
   "scripts": {
     "dev": "node server",
     "start": "NODE_ENV=production node server --watch",
-    "build": "rm -rf dist && npm run build:client && npm run build:server",
-    "build:client": "NODE_ENV=production node build/build-client.js",
-    "build:server": "NODE_ENV=production node build/build-server.js",
+    "build": "rm -rf dist && NODE_ENV=production node build/build.js",
     "lint": "eslint --ext .js,.vue src",
     "deploy": "now ./ --name=vue-hn-pwa --public"
   },
