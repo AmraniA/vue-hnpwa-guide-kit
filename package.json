@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "node server",
     "start": "NODE_ENV=production node server --watch",
-    "build": "rm -rf node_modules/webpack/node_modules/uglify-js && rm -rf dist && npm run build:client && npm run build:server",
+    "build": "rm -rf dist && npm run build:client && npm run build:server",
     "build:client": "NODE_ENV=production node build/build-client.js",
     "build:server": "NODE_ENV=production node build/build-server.js",
     "lint": "eslint --ext .js,.vue src",
@@ -18,7 +18,7 @@
   "dependencies": {
     "compression": "^1.6.2",
     "express": "^4.15.3",
-    "firebase-hackernews": "^0.6.1",
+    "firebase-hackernews": "^0.12.2",
     "minimist": "^1.2.0",
     "serve-favicon": "^2.4.3",
     "vue": "^2.3.3",

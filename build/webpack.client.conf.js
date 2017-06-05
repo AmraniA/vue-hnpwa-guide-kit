@@ -16,6 +16,11 @@ var webpackConfig = merge(baseWebpackConfig, {
   entry: {
     app: './src/entry-client.js'
   },
+  resolve: {
+    alias: {
+      'firebase-hackernews': 'firebase-hackernews/es'
+    }
+  },
   module: {
     rules: utils.styleLoaders({
       sourceMap: config[isProd ? 'build' : 'dev'].productionSourceMap,
@@ -47,20 +52,25 @@ var webpackConfig = merge(baseWebpackConfig, {
         )
       }
     }),
+    new webpack.optimize.CommonsChunkPlugin({
+      children: true,
+      async: 'common',
+      minChunks: 1
+    }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       chunks: ['vendor']
     }),
-    // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*']
-      }
-    ]),
+    // // copy custom static assets
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: path.resolve(__dirname, '../static'),
+    //     to: config.build.assetsSubDirectory,
+    //     ignore: ['.*']
+    //   }
+    // ]),
     new VueSSRClientPlugin()
   ]
 })
@@ -71,7 +81,8 @@ if (isProd) {
     new SWPrecacheWebpackPlugin({
       cacheId: 'vue-hn-pwa-guide',
       filename: 'service-worker.js',
-      staticFileGlobs: ['dist/**/*.{js,html,css,png,svg,json}'],
+      // staticFileGlobs: ['dist/**/*.{js,html,css,png,svg,json}'],
+      dontCacheBustUrlsMatching: /./,
       minify: true,
       staticFileGlobsIgnorePatterns: [/\.map$/, /\.json$/],
       runtimeCaching: [{

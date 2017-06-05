@@ -12,10 +12,10 @@ function resolve (dir) {
 
 const isProd = process.env.NODE_ENV === 'production'
 
+const sourceMap = isProd ? false : 'cheap-module-source-map'
+
 module.exports = {
-  devtool: isProd
-    ? false
-    : '#cheap-module-source-map',
+  devtool: sourceMap,
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
@@ -80,10 +80,25 @@ module.exports = {
   plugins: isProd
     ? [
         new webpack.optimize.UglifyJsPlugin({
+          sourceMap,
+          beautify: false,
+          comments: false,
           compress: {
-            warnings: false
+            unused: true,
+            dead_code: true,
+            warnings: false,
+            drop_debugger: true,
+            conditionals: true,
+            evaluate: true,
+            drop_console: true,
+            sequences: true,
+            booleans: true,
           },
-          sourceMap: true
+          extractComments: true
+        }),
+        new webpack.LoaderOptionsPlugin({
+          minimize: true,
+          debug: false
         }),
         new ExtractTextPlugin({
           filename: 'common.[chunkhash].css'
