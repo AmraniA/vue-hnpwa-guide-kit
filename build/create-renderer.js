@@ -13,16 +13,7 @@ module.exports = function createRenderer (bundle, opts) {
   }, opts))
 
   renderer.render = function (context, done) {
-    renderer.renderToString(context, (err, html) => {
-      let code = 200
-
-      if (err) {
-        code = err.code === 404 ? err.code : 500
-        html = err.code === 404 ? 'Page not found' : 'Internal server error'
-      }
-
-      done(code, html)
-    })
+    renderer.renderToString(context, done)
   }
 
   return renderer

@@ -44,7 +44,14 @@ app.get('*', (req, res) => {
     serviceWorker: serviceWorker
   }
 
-  renderer && renderer.render(context, (code, html) => {
+  renderer && renderer.render(context, (err, html) => {
+    let code = 200
+    
+    if (err) {
+      code = err.code === 404 ? err.code : 500
+      html = err.code === 404 ? 'Page not found' : 'Internal server error'
+    }
+
     res.status(code).end(html)
   })
 })
