@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <a href="https://vuejs.org">
-      <img src="../../static/img/logo-32x32.png" alt="Vue.js PWA" /> 
+      <img src="../assets/logo-32x32.png" alt="Vue.js PWA" /> 
     </a>
     <router-link v-for="link in links" :key="link.herf" :to="link.href">
       {{ link.label }}
