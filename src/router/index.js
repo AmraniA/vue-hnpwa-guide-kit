@@ -27,7 +27,7 @@ export function createRouter () {
   return new Router({
     mode: 'history',
     routes: [
-      { path: '/', name: 'Main', component: createStory('top') },
+      { path: '/', redirect: '/top' },
       { path: '/top/:page(\\d+)?', name: 'Top', component: createStory('top') },
       { path: '/new/:page(\\d+)?', name: 'New', component: createStory('new') },
       { path: '/best/:page(\\d+)?', name: 'Best', component: createStory('best') },
