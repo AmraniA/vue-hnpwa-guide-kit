@@ -31,11 +31,16 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
+// prevent to response 303 status code while make a connect
+const serve = (subpath, cache) => express.static(path.resolve(__dirname, subpath), {
+  maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
+})
+
 app.use(compression({ threshold: 0 }))
-app.use('/dist', express.static('./dist'))
-app.use('/static', express.static('./static'))
-app.use('/manifest.json', express.static('./static/manifest.json'))
-app.use('/service-worker.js', express.static('./dist/service-worker.js'))
+app.use('/dist', serve('./dist', true))
+app.use('/static', serve('./static', true))
+app.use('/manifest.json', serve('./static/manifest.json', true))
+app.use('/service-worker.js', serve('./dist/service-worker.js'))
 app.use(favicon('./src/assets/logo-32x32.png'))
 app.get('*', (req, res) => {
   const context = {
