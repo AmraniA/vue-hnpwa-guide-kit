@@ -1,21 +1,19 @@
 import Vue from 'vue'
-import hackernews from 'firebase-hackernews'
 import App from './views/App'
-import Hackernews from './mixins/vue-hn-mixin'
 import { createRouter } from './router'
+import wp from './wordpress-api'
+import wpmixin from './mixins/vue-wp-mixin'
 
-Vue.use(Hackernews)
+Vue.use(wpmixin)
 
 Vue.config.productionTip = false
-
 export function createApp () {
   const router = createRouter()
-  const hn = hackernews()
+  const api = wp({endpoint: 'http://asomovitmultiservices.com/wp-json/'})
   const app = new Vue({
-    hn,
+    api,
     router,
     render: h => h(App)
   })
-
-  return { app, router, hn }
+  return { app, router, api }
 }

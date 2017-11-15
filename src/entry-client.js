@@ -8,7 +8,7 @@ Vue.mixin({
   beforeRouteUpdate (to, from, next) {
     const { asyncData } = this.$options
     if (asyncData) {
-      asyncData({ hn, route: to }).then(next).catch(next)
+      asyncData({ api, route: to }).then(next).catch(next)
     } else {
       next()
     }
@@ -16,11 +16,11 @@ Vue.mixin({
 })
 
 // create a client-side app
-const { app, router, hn } = createApp()
+const { app, router, api } = createApp()
 
 // hydrating initial state into global object on client
 if (window.__INITIAL_STATE__) {
-  hn.dataCached(window.__INITIAL_STATE__)
+ // hn.dataCached(window.__INITIAL_STATE__)
 }
 
 // [navigation guards](https://goo.gl/Mmgqhj)
@@ -44,7 +44,7 @@ router.onReady(() => {
 
     Promise.all(activated.map(c => {
       if (c.asyncData) {
-        return c.asyncData({ hn, route: to })
+        return c.asyncData({ api, route: to })
       }
     })).then(() => {
       next()

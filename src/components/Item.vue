@@ -1,20 +1,18 @@
 <template>
   <div class="item">
     <span class="score">
-      {{item.score}}
+      {{item.id}}
     </span>
     <span class="title">
-      <a :href="item.url" target="_black" rel="noopener">{{ item.title }}</a>
+      <a :href="item.link" target="_black" rel="noopener">{{ item.title.rendered }}</a>
     </span>
-    <br />
+    <br>
+
     <span class="meta">
       <span>
-        by <router-link :to="`/users/${item.by}`">{{ item.by }}</router-link>
-      </span>
-      <span>
-        | <router-link :to="`/comments/${item.id}`">{{ item.descendants }} comments</router-link>
-      </span>
-    </span>
+         by <router-link :to="`/users/${item.author}`">{{ item.author }}</router-link>
+       </span>
+     </span>
   </div>
 </template>
 

@@ -4,7 +4,7 @@ import { createApp } from './app'
 // [Source Code Structure · GitBook](https://goo.gl/UKYgvr)
 export default context => {
   return new Promise((resolve, reject) => {
-    const { app, router, hn } = createApp()
+    const { app, router, api } = createApp()
 
     router.push(context.url)
 
@@ -19,11 +19,11 @@ export default context => {
       // request data asynchronously in matched component
       Promise.all(matchedComponents.map(Component => {
         if (Component.asyncData) {
-          return Component.asyncData({ hn, route: router.currentRoute })
+          return Component.asyncData({ api, route: router.currentRoute })
         }
       })).then(() => {
         // flush init state to hydrate a client
-        context.state = hn.dataCached()
+        // context.state = hn.dataCached()
         resolve(app)
       })
     }, reject)

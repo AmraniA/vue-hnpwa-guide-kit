@@ -1,8 +1,9 @@
 <template>
   <div>
-    <template v-for="item in items">
-      <item :item="item" />
-    </template>
+     <template v-for="item in items">
+        <item :item="item" />
+      </template>
+   
     <div class="page-nav">
       <span v-show="hasMore">
         <router-link :to="`/${type}/${this.page + 1}`">More stories</router-link>
@@ -19,13 +20,18 @@ export default {
     type: String
   },
   data () {
-    // items will be updated when navigation changed
     return {
-      items: this.$hn.storiesCached(this.type, {
-        page: Number(this.$route.params.page || 1)
-      }),
-      totalItems: this.$hn.lengthCached(this.type)
+      items: ''
     }
+    // items will be updated when navigation changed
+  },
+  created () {
+    var self = this
+    this.$api.getPosts().then(function (data) {
+      self.items = data
+    }).catch(function (err) {
+      return err
+    })
   },
   computed: {
     page () {
@@ -41,7 +47,7 @@ export default {
   watch: {
     page (to, from) {
       // items will be updated when page changed
-      this.items = this.$hn.storiesCached(this.type, { page: to })
+      this.items = this.$api.getPosts()
     }
   },
   components: {

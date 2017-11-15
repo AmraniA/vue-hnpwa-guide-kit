@@ -8,10 +8,8 @@ function createStory (type) {
     name: `${type}-stories-view`,
     // custom static method for target components
     // can be accessed at $options
-    asyncData ({ hn, route }) {
-      return hn.stories(type, {
-        page: Number(route.params.page || 1)
-      })
+    asyncData ({ api, route }) {
+      return api.getPosts()
     },
     render (ce) {
       return ce(Stories, { props: { type } })
