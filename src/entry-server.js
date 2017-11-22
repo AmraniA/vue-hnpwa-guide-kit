@@ -23,7 +23,7 @@ export default context => {
         }
       })).then(() => {
         // flush init state to hydrate a client
-        // context.state = hn.dataCached()
+        // context.state = api.dataCached()
         resolve(app)
       })
     }, reject)

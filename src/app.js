@@ -9,7 +9,7 @@ Vue.use(wpmixin)
 Vue.config.productionTip = false
 export function createApp () {
   const router = createRouter()
-  const api = wp({endpoint: 'http://asomovitmultiservices.com/wp-json/'})
+  const api = wp({endpoint: 'http://wasfa.ywaaw.com/wp-json'})
   const app = new Vue({
     api,
     router,

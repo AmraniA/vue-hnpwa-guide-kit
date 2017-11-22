@@ -20,7 +20,7 @@ const { app, router, api } = createApp()
 
 // hydrating initial state into global object on client
 if (window.__INITIAL_STATE__) {
- // hn.dataCached(window.__INITIAL_STATE__)
+  api.dataCached(window.__INITIAL_STATE__)
 }
 
 // [navigation guards](https://goo.gl/Mmgqhj)

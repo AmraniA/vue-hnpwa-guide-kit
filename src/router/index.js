@@ -3,20 +3,6 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-function createStory (type) {
-  return {
-    name: `${type}-stories-view`,
-    // custom static method for target components
-    // can be accessed at $options
-    asyncData ({ api, route }) {
-      return api.getPosts()
-    },
-    render (ce) {
-      return ce(Stories, { props: { type } })
-    }
-  }
-}
-
 const Stories = () => import(/* webpackChunkName: "stories" */'@/views/Stories.vue')
 const Users = () => import(/* webpackChunkName: "users" */'@/views/Users.vue')
 const Comments = () => import(/* webpackChunkName: "comments" */ '@/views/Comments.vue')
@@ -25,13 +11,9 @@ export function createRouter () {
   return new Router({
     mode: 'history',
     routes: [
-      { path: '/', redirect: '/top' },
-      { path: '/top/:page(\\d+)?', name: 'Top', component: createStory('top') },
-      { path: '/new/:page(\\d+)?', name: 'New', component: createStory('new') },
-      { path: '/best/:page(\\d+)?', name: 'Best', component: createStory('best') },
-      { path: '/ask/:page(\\d+)?', name: 'Ask', component: createStory('ask') },
-      { path: '/show/:page(\\d+)?', name: 'Show', component: createStory('show') },
-      { path: '/job/:page(\\d+)?', name: 'Job', component: createStory('job') },
+      { path: '/', redirect: '/category/' },
+      { path: '/category/:category?', name: 'Stories', component: Stories, props: true },
+      { path: '/category/:category?/page/:page', name: 'pagedStories', component: Stories, props: true },
       { path: '/users/:id?', name: 'Users', component: Users },
       { path: '/comments/:id?', name: 'Comments', component: Comments }
     ],

@@ -6,6 +6,9 @@
     <span class="title">
       <a :href="item.link" target="_black" rel="noopener">{{ item.title.rendered }}</a>
     </span>
+
+      <img :src='item._embedded["wp:featuredmedia"][0].source_url' width="50" height="50">
+
     <br>
 
     <span class="meta">
@@ -24,11 +27,11 @@ export default {
 
 <style scoped>
 .item {
-  background-color: #fff;
-  padding: 20px 30px 20px 80px;
-  border-bottom: 1px solid #eee;
-  position: relative;
-  line-height: 20px;
+    background-color: #fff;
+    padding: 20px 30px 20px 80px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    line-height: 20px;
 }
 
 .score {
@@ -41,7 +44,11 @@ export default {
   text-align: center;
   margin-top: -10px;
 }
-
+.img {
+  width: 100px;
+  height: 100px;
+  float: right;
+}
 .title a {
   color: #0e0e0e;
   text-decoration: none;

@@ -75,18 +75,33 @@ if (isProd) {
       filename: 'service-worker.js',
       // staticFileGlobs: ['dist/**/*.{js,html,css,png,svg,json}'],
       dontCacheBustUrlsMatching: /./,
-      minify: true,
+      minify: false,
       staticFileGlobsIgnorePatterns: [/\.map$/, /\.json$/],
       runtimeCaching: [{
         urlPattern: '/',
         handler: 'networkFirst'
-      }, {
-        urlPattern: /\/(top|new|show|ask|jobs)/,
+      },{
+        urlPattern:/^http:\/\/asomovitmultiservices\.com\/wp-json(.*)/,
+        handler:'networkFirst',
+        options: {
+          cache: {
+            maxEntries: 100,
+            name: 'wp-posts-cache'
+        }
+      }  
+      },{
+        urlPattern: /\/category\//,
+        handler: 'networkFirst'
+      },{
+        urlPattern: '/:category?',
         handler: 'networkFirst'
       }, {
         urlPattern: '/item/:id',
         handler: 'networkFirst'
       }, {
+        urlPattern: '/:category?/page/:page',
+        handler: 'networkFirst'
+      },{
         urlPattern: '/user/:id',
         handler: 'networkFirst'
       }]

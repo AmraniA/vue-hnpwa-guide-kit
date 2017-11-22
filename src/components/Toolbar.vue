@@ -1,10 +1,10 @@
 <template>
   <div id="container">
-    <a href="https://vuejs.org">
+    <a href="#">
       <img src="../assets/logo-32x32.png" alt="Vue.js PWA" /> 
     </a>
-    <router-link v-for="link in links" :key="link.herf" :to="link.href">
-      {{ link.label }}
+    <router-link v-for="link in links" :key="link.id" :to="link.href">
+      {{ link.name }}
     </router-link>
   </div>
 </template>
@@ -13,22 +13,25 @@
 export default {
   data () {
     return {
-      links: [
-        {href: '/top', label: 'Top'},
-        {href: '/new', label: 'New'},
-        {href: '/best', label: 'Best'},
-        {href: '/ask', label: 'Ask'},
-        {href: '/show', label: 'Show'},
-        {href: '/job', label: 'Job'}
-      ]
+      links: []
     }
+  },
+  created () {
+    var self = this
+    this.$api.getCategories().then(function (data) {
+      self.links = data.map(function (el) {
+        return { id: el.id, name: el.name, href: '/category/' + el.id, count: el.count }
+      })
+    }).catch(function (err) {
+      return err
+    })
   }
 }
+
 </script>
 
 <style scoped>
 div {
-  max-width: 800px;
   padding: 0.76em 1em;
   box-sizing: border-box;
 }

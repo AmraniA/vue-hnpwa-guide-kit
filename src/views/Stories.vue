@@ -3,10 +3,11 @@
      <template v-for="item in items">
         <item :item="item" />
       </template>
+
    
     <div class="page-nav">
       <span v-show="hasMore">
-        <router-link :to="`/${type}/${this.page + 1}`">More stories</router-link>
+        <router-link :to="`/category/${category}/page/${this.page + 1}`">More stories</router-link>
       </span>
     </div>
   </div>
@@ -17,7 +18,7 @@ import Item from '@/components/Item'
 
 export default {
   props: {
-    type: String
+    category: String
   },
   data () {
     return {
@@ -25,20 +26,27 @@ export default {
     }
     // items will be updated when navigation changed
   },
+
   created () {
-    var self = this
-    this.$api.getPosts().then(function (data) {
-      self.items = data
-    }).catch(function (err) {
-      return err
-    })
+    this.getPosts(this.category)
+  },
+  methods: {
+    getPosts (category = false, page = 1) {
+      var self = this
+      this.$api.getPosts(category, page).then(function (data) {
+        self.items = data
+      }).catch(function (err) {
+        return err
+      })
+    }
   },
   computed: {
     page () {
       return Number(this.$route.params.page) || 1
     },
     hasMore () {
-      return this.page < this.maxPage
+      // return this.page < this.maxPage
+      return true
     },
     maxPage () {
       return this.totalItems / this.items.length
@@ -47,7 +55,12 @@ export default {
   watch: {
     page (to, from) {
       // items will be updated when page changed
-      this.items = this.$api.getPosts()
+      this.getPosts(this.category, to)
+    },
+    category (to, from) {
+      if (to !== from) {
+        this.getPosts(to)
+      }
     }
   },
   components: {
